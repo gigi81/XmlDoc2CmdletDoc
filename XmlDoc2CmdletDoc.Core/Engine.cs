@@ -146,12 +146,13 @@ namespace XmlDoc2CmdletDoc.Core
                 throw new EngineException(EngineExitCode.AssemblyNotFound,
                                           "Assembly file not found: " + assemblyPath);
             }
+
             try
             {
+#if NET45
                 var assemblyDir = Path.GetDirectoryName(assemblyPath) ?? "";
-                AppDomain.CurrentDomain.AssemblyResolve += // TODO: Really ought to track this handler and cleanly remove it.
-                    (sender, args) =>
-                    {
+                AppDomain.CurrentDomain.AssemblyResolve += (sender, args) => // TODO: Really ought to track this handler and cleanly remove it.
+                {
                         var name = args.Name;
                         var i = name.IndexOf(',');
                         if (i != -1)
@@ -161,9 +162,13 @@ namespace XmlDoc2CmdletDoc.Core
                         name += ".dll";
                         var path = Path.Combine(assemblyDir, name);
                         return Assembly.LoadFrom(path);
-                    };
+                };
 
                 return Assembly.LoadFile(assemblyPath);
+
+#else
+                return System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
+#endif
             }
             catch (Exception exception)
             {

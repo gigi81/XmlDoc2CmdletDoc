@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Redgate and other contributors</Authors>
+    <Company>Redgate</Company>
+    <Product>XmlDoc2CmdletDoc</Product>
+    <Copyright>Copyright © 2014-2019, Red Gate Software Ltd and other contributors.</Copyright>
+  </PropertyGroup>
+</Project>
