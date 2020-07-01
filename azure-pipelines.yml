@@ -14,6 +14,7 @@ steps:
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
+    nugetConfigPath: nuget.config
 
 - task: VSBuild@1
   inputs:
@@ -30,7 +31,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: test
-    projects: 'tests/*.Tests/*.csproj'
+    projects: 'XmlDoc2CmdletDoc.Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 
 - task: NuGetCommand@2
