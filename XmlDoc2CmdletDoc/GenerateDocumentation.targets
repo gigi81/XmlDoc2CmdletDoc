@@ -1,0 +1,36 @@
+﻿<Project>
+  <PropertyGroup>
+    <!--
+        Indicates that, by default, XmlDoc2CmdletDoc should not run in strict mode.
+        Projects that wish to use strict mode should add the following to their
+        project file within a <PropertyGroup/> element:
+
+        <XmlDoc2CmdletDocStrict>true</XmlDoc2CmdletDocStrict>
+    -->
+    <XmlDoc2CmdletDocStrict Condition="'$(XmlDoc2CmdletDocStrict)' == ''">false</XmlDoc2CmdletDocStrict>
+
+    <!--
+        Indicates the names of any parameter sets that should be ignored.
+        Projects that wish to use exclude any parameter sets should add the
+        following to their project file within a <PropertyGroup/> element:
+
+        <XmlDoc2CmdletDocExcludeParameterSets>ParameterSetToExclude1,ParameterSetToExclude2</XmlDoc2CmdletDocExcludeParameterSets>
+    -->
+    <TaskFolder Condition=" '$(TargetFramework)' == 'netstandard2.0' ">netcore</TaskFolder>
+    <TaskFolder Condition=" '$(TargetFramework)' != 'netstandard2.0' ">net</TaskFolder>
+
+    <XmlDocExe Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">"$(MSBuildThisFileDirectory)net/XmlDoc2CmdletDoc.exe"</XmlDocExe>
+    <XmlDocExe Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' OR '$(TargetFrameworkIdentifier)' == '.NETStandard'">dotnet "$(MSBuildThisFileDirectory)netcore/XmlDoc2CmdletDoc.dll"</XmlDocExe>
+
+    <XmlDocExeArgs>"$(TargetPath)"</XmlDocExeArgs>
+    <XmlDocExeArgs Condition="'$(XmlDoc2CmdletDocExcludeParameterSets)' != ''">$(XmlDocExeArgs) -excludeParameterSets "$(XmlDoc2CmdletDocExcludeParameterSets)"</XmlDocExeArgs>
+    <XmlDocExeArgs Condition="'$(XmlDoc2CmdletDocStrict)' != 'false'">$(XmlDocExeArgs) -strict</XmlDocExeArgs>
+  </PropertyGroup>
+  
+  <Target Name="XmlDoc2CmdletDoc"
+          BeforeTargets="PostBuildEvent"
+          Inputs="$(TargetPath)"
+          Outputs="$(TargetPath)-Help.xml">
+    <Exec Command='$(XmlDocExe) $(XmlDocExeArgs)' />
+  </Target>
+</Project>

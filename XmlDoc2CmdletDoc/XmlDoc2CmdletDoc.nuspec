@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>XmlDoc2CmdletDoc</id>
-    <version>$version$</version>
+    <version>$Version$</version>
     <title>Redgate XmlDoc2CmdletDoc tool</title>
     <authors>Redgate</authors>
     <owners>Redgate</owners>
@@ -15,12 +15,15 @@
     <copyright>Copyright 2014-2019 Red Gate Software Ltd and other contributors.</copyright>
     <tags>PowerShell help xmldoc</tags>
     <developmentDependency>true</developmentDependency>
-    <releaseNotes><![CDATA[$releaseNotes$]]></releaseNotes>
+    <!--<releaseNotes><![CDATA[$releaseNotes$]]></releaseNotes>-->
   </metadata>
   <files>
-    <file src="bin\$configuration$\*.dll" target="tools" />
-    <file src="bin\$configuration$\*.exe" target="tools" />
-    <file src="XmlDoc2CmdletDoc.targets" target="build" />
+    <file src="XmlDoc2CmdletDoc.targets" target="build/net45/XmlDoc2CmdletDoc.targets" />
+    <file src="XmlDoc2CmdletDoc.targets" target="build/netstandard1.0/XmlDoc2CmdletDoc.targets" />
+
+    <file src="$publishdir$\net45\**\*.*" target="tools/net" />
+    <file src="$publishdir$\netcoreapp2.1\**\*.*" target="tools/netcore" />
+    <file src="GenerateDocumentation.targets" target="tools" />
     <file src="..\LICENSE.md" target="license" />
   </files>
 </package>
