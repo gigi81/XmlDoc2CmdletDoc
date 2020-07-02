@@ -13,8 +13,11 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
+    command: 'restore'
     restoreSolution: '$(solution)'
-    nugetConfigPath: nuget.config
+    feedsToUse: 'config'
+    nugetConfigPath: 'nuget.config'
+    includeNuGetOrg: true
 
 - task: VSBuild@1
   inputs:
